@@ -1,4 +1,5 @@
 import React from 'react';
+import CategoryArticles from './CategoryArticles';
 
 const Basketball = () => (
   <div className="bg-gray-50 min-h-screen w-full">
@@ -66,6 +67,7 @@ const Basketball = () => (
           <li><a href="https://www.fiba.basketball/" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">FIBA Official Site</a></li>
         </ul>
       </section>
+      <CategoryArticles category="Basketball" />
     </div>
   </div>
 );

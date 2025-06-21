@@ -1,5 +1,5 @@
 import React, { useState, ReactNode } from 'react';
-import { SearchIcon, UserIcon, BellIcon, MenuIcon, XIcon } from 'lucide-react';
+import { SearchIcon, BellIcon, MenuIcon, XIcon } from 'lucide-react';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,9 +29,8 @@ const Header = () => {
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <SearchIcon className="h-5 w-5 text-gray-600" />
             </button>
-            <a href="/login" className="p-1 hover:bg-gray-100 rounded-full">
-              <UserIcon className="h-5 w-5 text-gray-600" />
-            </a>
+            <button className="bg-red-600 hover:bg-red-700 px-4 py-1 text-sm font-medium rounded">Subscribe</button>
+            <a href="/login" className="text-sm font-medium text-gray-300 hover:text-gray-700 transition-colors">Log In</a>
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <BellIcon className="h-5 w-5 text-gray-600" />
             </button>
@@ -66,9 +65,8 @@ const Header = () => {
               <button className="p-1 hover:bg-gray-100 rounded-full">
                 <SearchIcon className="h-5 w-5 text-gray-600" />
               </button>
-              <a href="/login" className="p-1 hover:bg-gray-100 rounded-full">
-                <UserIcon className="h-5 w-5 text-gray-600" />
-              </a>
+              <button className="bg-red-600 hover:bg-red-700 px-4 py-1 text-sm font-medium rounded">Subscribe</button>
+              <a href="/login" className="text-sm font-medium text-black-300">Log In</a>
               <button className="p-1 hover:bg-gray-100 rounded-full">
                 <BellIcon className="h-5 w-5 text-gray-600" />
               </button>

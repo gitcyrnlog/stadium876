@@ -1,4 +1,5 @@
 import React from 'react';
+import CategoryArticles from './CategoryArticles';
 
 const Netball = () => (
   <div className="bg-gray-50 min-h-screen w-full">
@@ -66,6 +67,7 @@ const Netball = () => (
           <li><a href="https://www.britannica.com/sports/netball" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">Britannica: Netball</a></li>
         </ul>
       </section>
+      <CategoryArticles category="Netball" />
     </div>
   </div>
 );

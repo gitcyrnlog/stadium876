@@ -1,4 +1,5 @@
 import React from 'react';
+import CategoryArticles from './CategoryArticles';
 
 const TrackField = () => (
   <div className="bg-gray-50 min-h-screen w-full">
@@ -66,6 +67,7 @@ const TrackField = () => (
           <li><a href="https://www.britannica.com/sports/track-and-field-sports" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">Britannica: Track and Field</a></li>
         </ul>
       </section>
+      <CategoryArticles category="Track and Field" />
     </div>
   </div>
 );

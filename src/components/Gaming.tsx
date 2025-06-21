@@ -1,4 +1,5 @@
 import React from 'react';
+import CategoryArticles from './CategoryArticles';
 
 const Gaming = () => (
   <div className="bg-gray-50 min-h-screen w-full">
@@ -66,6 +67,7 @@ const Gaming = () => (
           <li><a href="https://www.britannica.com/topic/electronic-sports" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">Britannica: Electronic Sports</a></li>
         </ul>
       </section>
+      <CategoryArticles category="Gaming" />
     </div>
   </div>
 );

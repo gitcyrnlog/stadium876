@@ -18,6 +18,9 @@ import ScrollProgressBar from './components/ScrollProgressBar';
 import CategorySwitcher from './components/CategorySwitcher';
 import BackToTopButton from './components/BackToTopButton';
 import CustomLoader from './components/CustomLoader';
+import AdminDashboard from './components/admin/AdminDashboard';
+import ArticleFeed from './components/ArticleFeed';
+import FullArticle from './components/FullArticle';
 
 export function App() {
   const location = useLocation();
@@ -38,11 +41,13 @@ export function App() {
               >
                 <Routes location={location}>
                   <Route path="/login" element={<LoginSignup />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/football" element={<Football />} />
                   <Route path="/netball" element={<Netball />} />
                   <Route path="/basketball" element={<Basketball />} />
                   <Route path="/track-field" element={<TrackField />} />
                   <Route path="/gaming" element={<Gaming />} />
+                  <Route path="/article/:id" element={<FullArticle />} />
                   <Route path="/" element={
                     <>
                       <HeroSection />
@@ -53,7 +58,9 @@ export function App() {
                           <div className="lg:w-2/3">
                             <CategoryHighlights />
                           </div>
-                          <div className="lg:w-1/3">
+                          <div className="lg:w-1/3 flex flex-col gap-8">
+                            {/* New section above Trending */}
+                            <ArticleFeed showOnlyNew={true} />
                             <TrendingArticles />
                           </div>
                         </div>
