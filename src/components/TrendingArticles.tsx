@@ -1,10 +1,10 @@
 import React from 'react';
 const TrendingArticles = () => {
   const trendingArticles = [{
-    title: '',
-    category: '',
-    imageUrl: '',
-    date: ''
+    title: 'Are Our Athletes In Trouble?',
+    category: 'Track & Field',
+    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/stadium876-c42bf.firebasestorage.app/o/article-images%2F1750490673810_trk.jpeg?alt=media&token=73a79f23-3fbc-49fd-a5e1-40c930e55dc8',
+    date: 'June 21, 2024'
   }];
   return <div className="bg-white rounded-lg shadow-sm p-6">
       <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-200 text-gray-900 dark:text-yellow-400">

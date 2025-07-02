@@ -1,17 +1,20 @@
+/**
+ * ArticleFeed.tsx
+ *
+ * Displays a feed of articles from Firestore.
+ * - Shows a 'New' section for articles from the last 2 days
+ * - Shows all other articles in the main feed
+ * - Supports preview and full article navigation
+ * - Used on homepage and can be filtered via props
+ */
+
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
-
-interface Article {
-  id: string;
-  title: string;
-  content: string;
-  imageUrl?: string;
-  videoLinks?: string[];
-  createdAt: Timestamp | { seconds: number; nanoseconds: number };
-  category?: string;
-}
+import { useUserInterests } from '../utils/useUserInterests';
+import { scoreArticles } from '../utils/feed';
+import { Article } from '../types/Article';
 
 const getYouTubeId = (url: string) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/)?)([\w-]{11})/);
@@ -22,34 +25,66 @@ interface ArticleFeedProps {
   showOnlyNew?: boolean;
 }
 
+/**
+ * ArticleFeed component
+ * - Fetches and displays articles from Firestore
+ * - Optionally shows only new articles (showOnlyNew)
+ */
 const ArticleFeed: React.FC<ArticleFeedProps> = ({ showOnlyNew = false }) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [newArticles, setNewArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
+  const userInterests = useUserInterests();
 
   useEffect(() => {
     const fetchArticles = async () => {
       const q = query(collection(db, 'articles'), orderBy('createdAt', 'desc'));
       const snapshot = await getDocs(q);
-      const allArticles: Article[] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Article));
+      const allArticles: Article[] = snapshot.docs.map(doc => ({
+        id: doc.id,
+        title: doc.data().title || '',
+        content: doc.data().content || '',
+        imageUrl: doc.data().imageUrl || '',
+        videoLinks: doc.data().videoLinks || [],
+        createdAt: doc.data().createdAt,
+        category: doc.data().category || '',
+        author: doc.data().author || 'Unknown',
+        authorImageUrl: doc.data().authorImageUrl || '',
+        readTime: doc.data().readTime || '2',
+        clicks: doc.data().clicks || 0,
+      }));
       const now = Date.now();
       const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
-      const newArts = allArticles.filter(article => {
-        if (!article.createdAt) return false;
-        let ts = 0;
-        if (article.createdAt instanceof Timestamp) {
-          ts = article.createdAt.toDate().getTime();
-        } else if ('seconds' in article.createdAt) {
-          ts = article.createdAt.seconds * 1000;
-        }
-        return now - ts <= twoDaysMs;
-      });
-      setNewArticles(newArts);
-      setArticles(allArticles.filter(a => !newArts.some(n => n.id === a.id)));
+      // Use the original mapped allArticles for both new and filtered articles
+      setNewArticles(scoreArticles(
+        allArticles.filter(article => {
+          if (!article.createdAt) return false;
+          let ts = 0;
+          if (article.createdAt instanceof Timestamp) {
+            ts = article.createdAt.toDate().getTime();
+          } else if ('seconds' in article.createdAt) {
+            ts = article.createdAt.seconds * 1000;
+          }
+          return now - ts <= twoDaysMs;
+        }),
+        userInterests || []
+      ));
+      setArticles(scoreArticles(
+        allArticles.filter(a => {
+          let ts = 0;
+          if (a.createdAt instanceof Timestamp) {
+            ts = a.createdAt.toDate().getTime();
+          } else if ('seconds' in a.createdAt) {
+            ts = a.createdAt.seconds * 1000;
+          }
+          return now - ts > twoDaysMs;
+        }),
+        userInterests || []
+      ));
       setLoading(false);
     };
     fetchArticles();
-  }, []);
+  }, [userInterests]);
 
   if (loading) return <div className="text-center py-10">Loading articles...</div>;
 

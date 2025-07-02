@@ -1,3 +1,11 @@
+/**
+ * App.tsx
+ *
+ * Main application entry point for Stadium876.
+ * Handles global layout, theming, routing, and page transitions.
+ * Integrates all major sections, navigation, and global UI components.
+ */
+
 import React, { Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './ThemeContext';
@@ -21,7 +29,15 @@ import CustomLoader from './components/CustomLoader';
 import AdminDashboard from './components/admin/AdminDashboard';
 import ArticleFeed from './components/ArticleFeed';
 import FullArticle from './components/FullArticle';
+import Subscribe from './components/Subscribe';
 
+/**
+ * App component
+ * - Provides theme context
+ * - Renders header, footer, and all main routes
+ * - Handles animated page transitions
+ * - Integrates global UI (scroll bar, back to top, etc.)
+ */
 export function App() {
   const location = useLocation();
   return (
@@ -48,6 +64,7 @@ export function App() {
                   <Route path="/track-field" element={<TrackField />} />
                   <Route path="/gaming" element={<Gaming />} />
                   <Route path="/article/:id" element={<FullArticle />} />
+                  <Route path="/subscribe" element={<Subscribe />} />
                   <Route path="/" element={
                     <>
                       <HeroSection />

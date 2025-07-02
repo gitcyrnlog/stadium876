@@ -15,9 +15,9 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <SocialLink href="https://facebook.com" icon={<FacebookIcon className="h-5 w-5" />} />
-              <SocialLink href="https://twitter.com" icon={<TwitterIcon className="h-5 w-5" />} />
-              <SocialLink href="https://instagram.com" icon={<InstagramIcon className="h-5 w-5" />} />
-              <SocialLink href="https://youtube.com" icon={<YoutubeIcon className="h-5 w-5" />} />
+              <SocialLink href="https://twitter.com/stadium876" icon={<TwitterIcon className="h-5 w-5" />} />
+              <SocialLink href="https://www.instagram.com/stadium876/" icon={<InstagramIcon className="h-5 w-5" />} />
+              <SocialLink href="https://www.youtube.com/@stadium876" icon={<YoutubeIcon className="h-5 w-5" />} />
             </div>
           </div>
           <div>

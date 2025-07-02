@@ -1,3 +1,10 @@
+/**
+ * CategoryArticles.tsx
+ *
+ * Displays all articles for a given category from Firestore.
+ * Used in each main section (Football, Netball, Basketball, Track & Field, Gaming).
+ */
+
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
@@ -13,6 +20,11 @@ interface Article {
   category?: string;
 }
 
+/**
+ * CategoryArticles component
+ * - Fetches and displays articles for a specific category
+ * - Shows preview and link to full article
+ */
 const CategoryArticles: React.FC<{ category: string }> = ({ category }) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);

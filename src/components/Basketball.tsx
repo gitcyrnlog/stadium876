@@ -1,75 +1,90 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchSoccerLeagues, fetchLeagueEventsByDate } from './apiFootball';
+import { Header } from './football/Header';
+import { HeroSection } from './football/HeroSection';
+import { MatchesSection } from './football/MatchesSection';
 import CategoryArticles from './CategoryArticles';
 
-const Basketball = () => (
-  <div className="bg-gray-50 min-h-screen w-full">
-    {/* Hero Section */}
-    <div className="w-full bg-black relative overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1500&q=80"
-          alt="Basketball court"
-          className="w-full h-full object-cover opacity-50"
-        />
-      </div>
-      <div className="container mx-auto px-4 py-16 md:py-24 relative z-10 flex flex-col items-center text-center">
-        <div className="mb-4 flex space-x-1">
-          <div className="w-4 h-4 bg-black rounded-full"></div>
-          <div className="w-4 h-4 bg-green-600 rounded-full"></div>
-          <div className="w-4 h-4 bg-yellow-400 rounded-full"></div>
-        </div>
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-          Jamaican & World Basketball
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl">
-          Explore the latest news, competitions, and highlights from Jamaica and the global basketball scene.
-        </p>
-      </div>
-    </div>
+const DEFAULT_DATE = '2025-05-25';
 
-    {/* Main Content */}
-    <div className="max-w-3xl mx-auto py-10 px-4">
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-2 text-green-700 dark:text-yellow-400">About Basketball</h2>
-        <p className="mb-2 text-gray-700">Basketball is a dynamic team sport played by two teams of five players, aiming to score by shooting a ball through the opponent’s hoop. Invented in 1891, it is now one of the world’s most popular sports, played in over 200 countries.</p>
-        <p className="mb-2 text-gray-700">Jamaica has a growing basketball culture, with local leagues and players making their mark internationally, including in the NBA and college basketball.</p>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Jamaican Basketball Highlights</h2>
-        <ul className="list-disc ml-6 mb-2 text-gray-700">
-          <li>Jamaica National Teams: Compete in FIBA Americas and Caribbean tournaments, with both men’s and women’s squads.</li>
-          <li>Local Leagues: The National Basketball League (NBL) and school competitions develop homegrown talent.</li>
-          <li>Notable Players: Jamaicans have played in the NBA and overseas, including Samardo Samuels and Kimani Ffriend.</li>
-        </ul>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Major Competitions</h2>
-        <ul className="list-disc ml-6 mb-2 text-gray-700">
-          <li><strong>NBA:</strong> The premier professional basketball league in the world, based in the United States.</li>
-          <li><strong>FIBA Basketball World Cup:</strong> The top international tournament for national teams, held every four years.</li>
-          <li><strong>Olympic Basketball:</strong> Basketball has been an Olympic sport since 1936 (men) and 1976 (women).</li>
-        </ul>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Stay Updated</h2>
-        <p className="mb-2 text-gray-700">Get the latest news, scores, and fixtures from trusted sources:</p>
-        <ul className="list-disc ml-6 text-green-700">
-          <li><a href="https://www.fiba.basketball/" className="underline" target="_blank" rel="noopener noreferrer">FIBA Official Site</a></li>
-          <li><a href="https://www.nba.com/" className="underline" target="_blank" rel="noopener noreferrer">NBA</a></li>
-          <li><a href="https://www.jamaicabasketball.org/" className="underline" target="_blank" rel="noopener noreferrer">Jamaica Basketball Association</a></li>
-        </ul>
-      </section>
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Learn More</h2>
-        <ul className="list-disc ml-6">
-          <li><a href="https://en.wikipedia.org/wiki/Basketball" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">Wikipedia: Basketball</a></li>
-          <li><a href="https://www.britannica.com/sports/basketball" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">Britannica: Basketball</a></li>
-          <li><a href="https://www.fiba.basketball/" className="text-green-700 underline" target="_blank" rel="noopener noreferrer">FIBA Official Site</a></li>
-        </ul>
-      </section>
-      <CategoryArticles category="Basketball" />
+const Basketball = () => {
+  const [leagues, setLeagues] = useState<{ idLeague: string; strLeague: string }[]>([]);
+  const [selectedLeague, setSelectedLeague] = useState('');
+  const [searchDate, setSearchDate] = useState(DEFAULT_DATE);
+  const [matches, setMatches] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchSoccerLeagues().then((leagues) => {
+      // Filter for basketball leagues
+      const basketballLeagues = leagues.filter((l: any) => l.strSport === 'Basketball');
+      setLeagues(basketballLeagues);
+      if (basketballLeagues.length > 0) setSelectedLeague(basketballLeagues[0].strLeague);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!selectedLeague) return;
+    fetchLeagueEventsByDate(selectedLeague, searchDate).then((events) => {
+      setMatches(
+        (events || []).map((ev: any) => ({
+          homeTeam: ev.strHomeTeam,
+          awayTeam: ev.strAwayTeam,
+          homeScore: ev.intHomeScore ?? '-',
+          awayScore: ev.intAwayScore ?? '-',
+          date: ev.dateEvent + ' ' + (ev.strTime || ''),
+        }))
+      );
+    });
+  }, [selectedLeague, searchDate]);
+
+  return (
+    <div className="bg-gray-50 min-h-screen w-full">
+      <Header />
+      {/* NBA Banner Nav Bar */}
+      <div className="w-full bg-gradient-to-r from-black via-yellow-500 to-green-600 py-2 flex justify-center items-center shadow-md">
+        <button
+          type="button"
+          className={`flex items-center gap-2 px-6 py-1 rounded-full font-bold text-lg shadow transition bg-white/90 hover:bg-white text-black
+            ${selectedLeague === 'NBA' ? 'ring-4 ring-green-700 ring-opacity-60 scale-105' : ''}`}
+          onClick={() => setSelectedLeague('NBA')}
+        >
+          <img src="https://images.ctfassets.net/h8q6lxmb5akt/5qXnOINbPrHKXWa42m6NOa/421ab176b501f5bdae71290a8002545c/nba-logo_2x.png" alt="NBA Logo" className="h-7 w-auto" />
+          NBA
+        </button>
+      </div>
+      <HeroSection>
+        {leagues.slice(0, 5).map((l) => (
+          <button
+            key={l.idLeague}
+            className={`text-sm font-medium px-3 py-1 rounded-full whitespace-nowrap transition-colors duration-200 ${selectedLeague === l.strLeague ? 'bg-green-700 text-white' : 'bg-gray-800 hover:bg-green-600 text-white'}`}
+            onClick={() => setSelectedLeague(l.strLeague)}
+          >
+            {l.strLeague}
+          </button>
+        ))}
+        <div className="ml-4">
+          <input
+            type="date"
+            className="border-0 rounded-full px-4 py-1 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-600 bg-white shadow transition-all duration-200 hover:ring-2 hover:ring-green-400 cursor-pointer"
+            value={searchDate}
+            onChange={e => setSearchDate(e.target.value)}
+            max={new Date().toISOString().split('T')[0]}
+            style={{ minWidth: 140 }}
+          />
+        </div>
+      </HeroSection>
+      <div className="container mx-auto px-4">
+        <MatchesSection
+          leagueName={selectedLeague}
+          matches={matches}
+          matchweek={undefined}
+        />
+        <div className="max-w-3xl mx-auto py-10 px-4">
+          <CategoryArticles category="Basketball" />
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Basketball;

@@ -1,28 +1,40 @@
+/**
+ * FeaturedCarousel.tsx
+ *
+ * Displays a carousel of the 3 newest articles from Firestore.
+ * Used on the homepage to highlight featured content.
+ */
+
 import React, { useEffect, useRef, useState } from 'react';
-// Placeholder for featured articles carousel
+import { db } from '../firebase';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+
+/**
+ * FeaturedCarousel component
+ * - Fetches and cycles through the newest articles
+ * - Shows preview, image, and link to full article
+ */
 const FeaturedCarousel = () => {
   const [current, setCurrent] = useState(0);
+  const [featured, setFeatured] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  // This will later fetch featured articles from Firestore or props
-  const featured = [
-    {
-      title: 'Featured Article 1',
-      imageUrl: '',
-      summary: 'Summary for featured article 1',
-    },
-    {
-      title: 'Featured Article 2',
-      imageUrl: '',
-      summary: 'Summary for featured article 2',
-    },
-    {
-      title: 'Featured Article 3',
-      imageUrl: '',
-      summary: 'Summary for featured article 3',
-    },
-  ];
 
   useEffect(() => {
+    const fetchFeatured = async () => {
+      const q = query(collection(db, 'articles'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      // Get the 3 newest articles
+      const articles = snapshot.docs.slice(0, 3).map(doc => ({ id: doc.id, ...doc.data() }));
+      setFeatured(articles);
+      setLoading(false);
+    };
+    fetchFeatured();
+  }, []);
+
+  useEffect(() => {
+    if (!featured.length) return;
     intervalRef.current = setInterval(() => {
       setCurrent((prev) => (prev + 1) % featured.length);
     }, 2500);
@@ -30,6 +42,8 @@ const FeaturedCarousel = () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [featured.length]);
+
+  if (loading) return <div className="w-full bg-white py-8 text-center">Loading featured articles...</div>;
 
   return (
     <div className="w-full bg-white py-8">
@@ -45,7 +59,8 @@ const FeaturedCarousel = () => {
                   {item.imageUrl ? <img src={item.imageUrl} alt={item.title} className="h-full w-full object-cover rounded" /> : <span className="text-gray-400">Image</span>}
                 </div>
                 <h3 className="font-bold text-lg mb-1 text-black">{item.title}</h3>
-                <p className="text-gray-800 text-sm">{item.summary}</p>
+                <p className="text-gray-800 text-sm mb-2">{item.content ? item.content.split('\n').slice(0,2).join(' ').slice(0,120) + (item.content.length > 120 ? '...' : '') : ''}</p>
+                <Link to={`/article/${item.id}`} className="text-green-700 font-semibold hover:underline">Read more</Link>
               </div>
             </div>
           ))}
@@ -63,4 +78,5 @@ const FeaturedCarousel = () => {
     </div>
   );
 };
+
 export default FeaturedCarousel;

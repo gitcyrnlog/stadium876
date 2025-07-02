@@ -1,9 +1,24 @@
+/**
+ * AdminDashboard.tsx
+ *
+ * Secure admin dashboard for journalists to submit articles to Stadium876.
+ * - Google Auth sign-in for admins
+ * - Role-based access control (Firestore 'users' collection)
+ * - Article submission with image upload, video links, and category selection
+ * - Articles stored in Firestore and images in Firebase Storage
+ */
+
 import React, { useState, useEffect } from 'react';
 import { db, storage, auth, GoogleAuthProvider } from '../../firebase';
 import { collection, addDoc, Timestamp, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
 
+/**
+ * AdminDashboard component
+ * - Handles authentication, role check, and article submission form
+ * - Only accessible to users with { role: 'admin' } in Firestore
+ */
 const AdminDashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);

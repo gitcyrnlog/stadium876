@@ -1,8 +1,10 @@
 import React, { useState, ReactNode } from 'react';
 import { SearchIcon, BellIcon, MenuIcon, XIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 bg-white shadow-md z-50">
@@ -29,7 +31,12 @@ const Header = () => {
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <SearchIcon className="h-5 w-5 text-gray-600" />
             </button>
-            <button className="bg-red-600 hover:bg-red-700 px-4 py-1 text-sm font-medium rounded">Subscribe</button>
+            <button
+              className="bg-red-600 hover:bg-red-700 px-4 py-1 text-sm font-medium rounded"
+              onClick={() => navigate('/subscribe')}
+            >
+              Subscribe
+            </button>
             <a href="/login" className="text-sm font-medium text-gray-300 hover:text-gray-700 transition-colors">Log In</a>
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <BellIcon className="h-5 w-5 text-gray-600" />
@@ -65,7 +72,12 @@ const Header = () => {
               <button className="p-1 hover:bg-gray-100 rounded-full">
                 <SearchIcon className="h-5 w-5 text-gray-600" />
               </button>
-              <button className="bg-red-600 hover:bg-red-700 px-4 py-1 text-sm font-medium rounded">Subscribe</button>
+              <button
+                className="bg-red-600 hover:bg-red-700 px-4 py-1 text-sm font-medium rounded"
+                onClick={() => navigate('/subscribe')}
+              >
+                Subscribe
+              </button>
               <a href="/login" className="text-sm font-medium text-black-300">Log In</a>
               <button className="p-1 hover:bg-gray-100 rounded-full">
                 <BellIcon className="h-5 w-5 text-gray-600" />
