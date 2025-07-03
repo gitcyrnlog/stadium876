@@ -5,7 +5,7 @@ import { App } from "./App";
 import { BrowserRouter as Router } from 'react-router-dom';
 
 render(
-  <Router>
+  <Router basename="/stadium876">
     <App />
   </Router>,
   document.getElementById("root")
