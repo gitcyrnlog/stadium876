@@ -1,6 +1,6 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 import { SearchIcon, BellIcon, MenuIcon, XIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, NavLink } from 'react-router-dom';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,19 +12,19 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <span className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-yellow-500 to-black">
                 Stadium876
               </span>
-            </a>
+            </Link>
           </div>
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <NavLink href="/football">Football</NavLink>
-            <NavLink href="/netball">Netball</NavLink>
-            <NavLink href="/basketball">Basketball</NavLink>
-            <NavLink href="/track-field">Track & Field</NavLink>
-            <NavLink href="/gaming">Gaming</NavLink>
+            <NavLink to="/football">Football</NavLink>
+            <NavLink to="/netball">Netball</NavLink>
+            <NavLink to="/basketball">Basketball</NavLink>
+            <NavLink to="/track-field">Track & Field</NavLink>
+            <NavLink to="/gaming">Gaming</NavLink>
           </nav>
           {/* Icons */}
           <div className="hidden md:flex items-center space-x-4">
@@ -37,7 +37,7 @@ const Header = () => {
             >
               Subscribe
             </button>
-            <a href="/login" className="text-sm font-medium text-gray-300 hover:text-gray-700 transition-colors">Log In</a>
+            <Link to="/login" className="text-sm font-medium text-gray-300 hover:text-gray-700 transition-colors">Log In</Link>
             <button className="p-1 hover:bg-gray-100 rounded-full">
               <BellIcon className="h-5 w-5 text-gray-600" />
             </button>
@@ -53,21 +53,21 @@ const Header = () => {
       {/* Mobile menu */}
       {mobileMenuOpen && <div className="md:hidden bg-white border-t border-gray-200">
           <div className="container mx-auto px-4 py-3 space-y-3">
-            <a href="/football" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
+            <Link to="/football" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
               Football
-            </a>
-            <a href="/netball" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
+            </Link>
+            <Link to="/netball" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
               Netball
-            </a>
-            <a href="/basketball" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
+            </Link>
+            <Link to="/basketball" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
               Basketball
-            </a>
-            <a href="/track-field" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
+            </Link>
+            <Link to="/track-field" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
               Track & Field
-            </a>
-            <a href="/gaming" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
+            </Link>
+            <Link to="/gaming" className="block py-2 text-base font-medium text-gray-900 hover:text-green-600">
               Gaming
-            </a>
+            </Link>
             <div className="flex space-x-4 py-3 border-t border-gray-200">
               <button className="p-1 hover:bg-gray-100 rounded-full">
                 <SearchIcon className="h-5 w-5 text-gray-600" />
@@ -78,7 +78,7 @@ const Header = () => {
               >
                 Subscribe
               </button>
-              <a href="/login" className="text-sm font-medium text-black-300">Log In</a>
+              <Link to="/login" className="text-sm font-medium text-black-300">Log In</Link>
               <button className="p-1 hover:bg-gray-100 rounded-full">
                 <BellIcon className="h-5 w-5 text-gray-600" />
               </button>
@@ -89,19 +89,4 @@ const Header = () => {
   );
 };
 
-
-type NavLinkProps = {
-  href: string;
-  children: ReactNode;
-};
-
-const NavLink = ({
-  href,
-  children
-}: NavLinkProps) => {
-  return <a href={href} className="text-base font-medium text-gray-800 hover:text-green-600 relative group">
-      {children}
-      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-500 group-hover:w-full transition-all duration-300"></span>
-    </a>;
-};
 export default Header;
